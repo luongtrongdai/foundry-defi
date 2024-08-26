@@ -14,7 +14,6 @@ contract ManualTokenScript is Script {
 
     function run() external {
         vm.startBroadcast();
-
         manualToken = new ManualToken("ManualToken", "MT", INITIAL_SUPPLY);
         vm.stopBroadcast();
     }
