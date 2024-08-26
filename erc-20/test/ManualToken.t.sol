@@ -41,13 +41,13 @@ contract ManualTokenTest is Test {
         assertEq(manualToken.balanceOf(bob), INITIAL_BALANCE);
     }
 
-    function test_Allowances() public allowance {        
+    function test_Allowances() public allowance {
         assertEq(manualToken.allowance(msg.sender, alice), INITIAL_BALANCE);
     }
 
     function test_TransferFrom() public allowance {
         uint256 senderBalance = manualToken.balanceOf(msg.sender);
-        
+
         vm.prank(alice);
         manualToken.transferFrom(msg.sender, bob, 1 ether);
         assertEq(senderBalance - 1 ether, manualToken.balanceOf(msg.sender));
