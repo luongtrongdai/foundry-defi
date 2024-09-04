@@ -13,3 +13,6 @@
 [submodule "nft/lib/foundry-devops"]
 	path = nft/lib/foundry-devops
 	url = https://github.com/ChainAccelOrg/foundry-devops
+[submodule "stable-coin/lib/forge-std"]
+	path = stable-coin/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
