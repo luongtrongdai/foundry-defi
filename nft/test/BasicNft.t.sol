@@ -11,10 +11,10 @@ contract BasicNftTest is Test {
     BasicNft private basicNft;
 
     function setUp() external {
-         BasicNftScript script = new BasicNftScript();
+        BasicNftScript script = new BasicNftScript();
 
-         script.run();
-         basicNft = script.basicNft();
+        script.run();
+        basicNft = script.basicNft();
     }
 
     function test_Init() external view {
