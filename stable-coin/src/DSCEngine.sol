@@ -79,10 +79,7 @@ contract DSCEngine is ReentrancyGuard {
 
     function redeemCollateralForDSC() external {}
 
-    function mintDSC(uint256 amountDscToMint) external
-        moreThanZero(amountDscToMint)
-        nonReentrant
-    {
+    function mintDSC(uint256 amountDscToMint) external moreThanZero(amountDscToMint) nonReentrant {
         s_amountDSCMinted[msg.sender] += amountDscToMint;
         _revertIfHealthFactorIsBroken(msg.sender);
         bool success = i_dsc.mint(msg.sender, amountDscToMint);
@@ -90,6 +87,7 @@ contract DSCEngine is ReentrancyGuard {
             revert DSCEngine__MintFailed();
         }
     }
+
     function burnDSC() external {}
 
     function liquidate() external {}
@@ -99,13 +97,12 @@ contract DSCEngine is ReentrancyGuard {
         mapping(address token => uint256 amount) storage collateralDeposited = s_collateralDeposited[user];
         address[] memory tokenAddrs = s_collateralTokens;
         uint256 length = tokenAddrs.length;
-        for (uint256 i = 0; i < length; ) {
+        for (uint256 i = 0; i < length;) {
             address tokenAddr = tokenAddrs[i];
             uint256 tokenAmount = collateralDeposited[tokenAddr];
             if (tokenAmount > 0) {
-                totalCollateralValueInUsd = 
-                    totalCollateralValueInUsd + tokenAmount * getTokenPrice(tokenAddr
-                    , tokenAmount);
+                totalCollateralValueInUsd =
+                    totalCollateralValueInUsd + tokenAmount * getTokenPrice(tokenAddr, tokenAmount);
             }
             i = i + 1;
         }
@@ -118,14 +115,19 @@ contract DSCEngine is ReentrancyGuard {
     ////////////////////////////////////
     // Private and Internal functions //
     ////////////////////////////////////
-    function _getAccountInfo(address _user) private view returns (uint256 totalDSCMinted, uint256 collateralValueInUSD) {
+    function _getAccountInfo(address _user)
+        private
+        view
+        returns (uint256 totalDSCMinted, uint256 collateralValueInUSD)
+    {
         totalDSCMinted = s_amountDSCMinted[_user];
         collateralValueInUSD = getAccountCollateralValue(_user);
     }
 
     function _healthFactor(address user) private view returns (uint256) {
         (uint256 totalDSCMinted, uint256 totalCollateralValueInUsd) = _getAccountInfo(user);
-        uint256 collateralAdjustedForThreshold = (totalCollateralValueInUsd * LIQUIDATION_THRESHOLD) / LIQUIDATION_PRECISION;
+        uint256 collateralAdjustedForThreshold =
+            (totalCollateralValueInUsd * LIQUIDATION_THRESHOLD) / LIQUIDATION_PRECISION;
         return (collateralAdjustedForThreshold * PRECISION) / totalDSCMinted;
     }
 

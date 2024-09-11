@@ -5,10 +5,11 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interf
 
 library PriceConverter {
     uint256 private constant PRECISION = 1e18;
+
     function getPrice(AggregatorV3Interface priceFeed) internal view returns (uint256) {
         (, int256 answer,,,) = priceFeed.latestRoundData();
         uint8 decimal = priceFeed.decimals();
-        uint256 additionalFeedPrecision = 10**decimal;
+        uint256 additionalFeedPrecision = 10 ** decimal;
         return uint256(answer) * (PRECISION / additionalFeedPrecision);
     }
 
