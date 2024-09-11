@@ -101,8 +101,7 @@ contract DSCEngine is ReentrancyGuard {
             address tokenAddr = tokenAddrs[i];
             uint256 tokenAmount = collateralDeposited[tokenAddr];
             if (tokenAmount > 0) {
-                totalCollateralValueInUsd =
-                    totalCollateralValueInUsd + tokenAmount * getTokenPrice(tokenAddr, tokenAmount);
+                totalCollateralValueInUsd = totalCollateralValueInUsd + getTokenPrice(tokenAddr, tokenAmount);
             }
             i = i + 1;
         }
@@ -136,5 +135,22 @@ contract DSCEngine is ReentrancyGuard {
         if (healthFactor < MIN_HEALTH_FACTOR) {
             revert DSCEngine__BreaksHealthFactor(healthFactor);
         }
+    }
+
+    // Getter & Setter
+    function getCollateralToken(uint256 index) public view returns (address) {
+        return s_collateralTokens[index];
+    }
+
+    function getPriceFeed(address token) public view returns (address) {
+        return s_priceFeeds[token];
+    }
+
+    function getDSC() public view returns (address) {
+        return address(i_dsc);
+    }
+
+    function getCollateralDeposited(address user, address token) public view returns (uint256) {
+        return s_collateralDeposited[user][token];
     }
 }
