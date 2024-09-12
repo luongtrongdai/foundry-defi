@@ -5,6 +5,7 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {DecentralizedStableCoin} from "src/DecentralizedStableCoin.sol";
 import {PriceConverter} from "src/library/PriceConverter.sol";
+import {console} from "forge-std/Test.sol";
 
 contract DSCEngine is ReentrancyGuard {
     // Type Declarations
@@ -127,11 +128,13 @@ contract DSCEngine is ReentrancyGuard {
         (uint256 totalDSCMinted, uint256 totalCollateralValueInUsd) = _getAccountInfo(user);
         uint256 collateralAdjustedForThreshold =
             (totalCollateralValueInUsd * LIQUIDATION_THRESHOLD) / LIQUIDATION_PRECISION;
+        console.log("totalDSCMinted: ", totalDSCMinted, " and collateralAdjustedForThreshold: ", collateralAdjustedForThreshold);
         return (collateralAdjustedForThreshold * PRECISION) / totalDSCMinted;
     }
 
     function _revertIfHealthFactorIsBroken(address user) internal view {
         uint256 healthFactor = _healthFactor(user);
+        console.log("healthFactor", healthFactor);
         if (healthFactor < MIN_HEALTH_FACTOR) {
             revert DSCEngine__BreaksHealthFactor(healthFactor);
         }

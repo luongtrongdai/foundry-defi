@@ -76,4 +76,12 @@ contract DSCEngineTest is Test {
             dscEngine.getAccountCollateralValue(BOB)
         );
     }
+
+    function test_MintDSCRevertWhenHealthFactorIsBroken() external {
+        address depositToken = dscEngine.getCollateralToken(0);
+        vm.prank(BOB);
+        dscEngine.depositCollateral(depositToken, 1 ether);
+        vm.prank(BOB);
+        dscEngine.mintDSC(1000 ether);
+    }
 }

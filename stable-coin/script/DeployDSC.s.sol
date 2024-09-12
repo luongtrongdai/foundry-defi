@@ -9,9 +9,10 @@ import {HelperConfig} from "script/HelperConfig.s.sol";
 contract DeployDSC is Script {
     DecentralizedStableCoin public dsc;
     DSCEngine public dscEngine;
+    HelperConfig public helperConfig;
 
     function run() external {
-        HelperConfig helperConfig = new HelperConfig();
+        helperConfig = new HelperConfig();
         HelperConfig.NetworkConfig memory activeNetworkConfig = helperConfig.getActiveNetworkConfig();
         vm.startBroadcast();
         dsc = new DecentralizedStableCoin();
