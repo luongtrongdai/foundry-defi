@@ -77,11 +77,18 @@ contract DSCEngineTest is Test {
         );
     }
 
+    function test_GetTokenAmountFromUSDWei() external {
+        address depositToken = dscEngine.getCollateralToken(0);
+        vm.prank(BOB);
+        uint256 tokenAmount = dscEngine.getTokenAmountFromUsd(depositToken, 2000 ether);
+        console.log("Amount of token: ", tokenAmount);
+    }
+
     function test_MintDSCRevertWhenHealthFactorIsBroken() external {
         address depositToken = dscEngine.getCollateralToken(0);
         vm.prank(BOB);
         dscEngine.depositCollateral(depositToken, 1 ether);
         vm.prank(BOB);
-        dscEngine.mintDSC(1000 ether);
+        dscEngine.mintDSC(2000 ether);
     }
 }

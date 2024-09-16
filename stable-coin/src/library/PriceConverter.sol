@@ -21,4 +21,10 @@ library PriceConverter {
         uint256 price = getPrice(priceFeed);
         return (price * amount) / PRECISION;
     }
+
+    function getAmountFromUSD(uint256 usdAmountInWei, address priceFeedAddr) internal view returns (uint256) {
+        AggregatorV3Interface priceFeed = AggregatorV3Interface(priceFeedAddr);
+        uint256 price = getPrice(priceFeed);
+        return (usdAmountInWei * PRECISION / price);
+    }
 }
