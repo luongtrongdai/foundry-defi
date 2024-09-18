@@ -57,10 +57,14 @@ contract DSCEngineTest is Test {
 
     function test_DepositCollateralSuccess() external {
         address depositToken = dscEngine.getCollateralToken(0);
+        vm.expectEmit();
+        emit DSCEngine.CollateralDeposited(BOB, depositToken, 1 ether);
         vm.prank(BOB);
         dscEngine.depositCollateral(depositToken, 1 ether);
 
         assertEq(1 ether, dscEngine.getCollateralDeposited(BOB, depositToken));
+        uint256 dscAmount = dscEngine.getAccountCollateralValue(BOB);
+        assertEq(dscAmount, 2000 ether);
     }
 
     function test_GetAccountCollateralValue() external {
@@ -81,14 +85,28 @@ contract DSCEngineTest is Test {
         address depositToken = dscEngine.getCollateralToken(0);
         vm.prank(BOB);
         uint256 tokenAmount = dscEngine.getTokenAmountFromUsd(depositToken, 2000 ether);
-        console.log("Amount of token: ", tokenAmount);
+        assertEq(1 ether, tokenAmount);
     }
 
     function test_MintDSCRevertWhenHealthFactorIsBroken() external {
         address depositToken = dscEngine.getCollateralToken(0);
-        vm.prank(BOB);
+        vm.startPrank(BOB);
         dscEngine.depositCollateral(depositToken, 1 ether);
-        vm.prank(BOB);
-        dscEngine.mintDSC(2000 ether);
+        vm.expectRevert();
+        dscEngine.mintDSC(3000 ether);
+        vm.stopPrank();
+    }
+
+    function test_depositCollateralAndMintDSC() external {
+        address depositToken = dscEngine.getCollateralToken(0);
+        vm.startPrank(BOB);
+        dscEngine.depositCollateralAndMintDSC(depositToken, 1 ether, 1000 ether);
+        assertEq(2000 ether, dscEngine.getAccountCollateralValue(BOB));
+        assertEq(1000 ether, dscEngine.getCollateraMinted(BOB));
+    }
+
+    function test_GetTokenPrice() external view {
+        address depositToken = dscEngine.getCollateralToken(0);
+        assertEq(2000 ether, dscEngine.getTokenPrice(depositToken, 1 ether));
     }
 }
