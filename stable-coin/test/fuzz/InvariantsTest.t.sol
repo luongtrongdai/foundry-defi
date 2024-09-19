@@ -36,7 +36,9 @@ contract InvariantsTest is StdInvariant, Test {
         for (uint256 i = 0; i < numberToken;) {
             address tokenAddr = networkConfig.tokenAddrs[i];
             uint256 tokenBalance = IERC20(tokenAddr).balanceOf(address(dscEngine));
-            protocolValue += dscEngine.getTokenPrice(tokenAddr, tokenBalance);
+            uint256 price = dscEngine.getTokenPrice(tokenAddr, tokenBalance);
+            console.log("Token: ", tokenAddr, " - value: ", price);
+            protocolValue += price;
             unchecked {
                 i = i + 1;
             }

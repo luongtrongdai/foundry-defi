@@ -6,6 +6,7 @@ import {ERC20Mock} from "@openzeppelin/contracts/mocks/token/ERC20Mock.sol";
 import {DSCEngine} from "src/DSCEngine.sol";
 import {DecentralizedStableCoin} from "src/DecentralizedStableCoin.sol";
 import {HelperConfig} from "script/HelperConfig.s.sol";
+import {MockAggregatorV3} from "../mocks/MockAggregatorV3.sol";
 
 contract Handler is Test {
     DSCEngine private dscEngine;
@@ -92,6 +93,13 @@ contract Handler is Test {
         ERC20Mock collateral = _getCollateralFromSeed(collateralSeed);
         dscEngine.liquidate(address(collateral), userToBeLiquidated, debtToCover);
     }
+
+    // function updateCollateralPrice(uint256 collateralSeed, uint96 newPrice) public {
+    //     ERC20Mock token = _getCollateralFromSeed(collateralSeed);
+    //     address priceFeedAddr = dscEngine.getPriceFeed(address(token));
+    //     int256 intNewPrice = int256(uint256(newPrice));
+    //     MockAggregatorV3(priceFeedAddr).updateAnswer(intNewPrice);
+    // }
 
     function _getCollateralFromSeed(uint256 _seed) private view returns (ERC20Mock) {
         HelperConfig.NetworkConfig memory networkConfig = helperConfig.getActiveNetworkConfig();
