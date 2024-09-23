@@ -16,10 +16,10 @@ contract MerkleAirdropTest is Test {
 
     function setUp() external {
         deployScript = new MerkelAirdropScript();
-        deployScript.run();
-
-        merkleAirdrop = deployScript.airdrop();
-        giftToken = deployScript.giftToken();
+        // deployScript.run();
+        giftToken = new GiftToken();
+        merkleAirdrop = new MerkleAirdrop(deployScript.ROOT(), giftToken);
+        giftToken.mint(address(merkleAirdrop), deployScript.AMOUNT_TO_TRANSFER());
 
         (user, userPrivKey) = makeAddrAndKey("user");
         console.log("User address: ", user);
