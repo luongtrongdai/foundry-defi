@@ -12,6 +12,7 @@ contract MerkleAirdropTest is Test {
     GiftToken private giftToken;
     address private user;
     uint256 private userPrivKey;
+    address private gasPlayer;
 
     function setUp() external {
         deployScript = new MerkelAirdropScript();
@@ -22,6 +23,7 @@ contract MerkleAirdropTest is Test {
 
         (user, userPrivKey) = makeAddrAndKey("user");
         console.log("User address: ", user);
+        gasPlayer = makeAddr("gasPlayer");
     }
 
     function test_deploySuccess() external view {
@@ -37,7 +39,10 @@ contract MerkleAirdropTest is Test {
         merkleProof[0] = 0x0fd7c981d39bece61f7499702bf59b3114a90e66b51ba2c53abdf7b62986c00a;
         merkleProof[1] = 0xe5ebd1e1b5a5478a944ecab36a9a954ac3b6b8216875f6524caa7a1d87096576;
 
-        merkleAirdrop.claim(user, claimBalance, merkleProof);
+        bytes32 message = merkleAirdrop.getMessage(user, claimBalance);
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(userPrivKey, message);
+        vm.prank(gasPlayer);
+        merkleAirdrop.claim(user, claimBalance, merkleProof, v, r, s);
 
         assertEq(startBalance + claimBalance, giftToken.balanceOf(user));
     }
