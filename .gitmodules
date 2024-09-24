@@ -37,3 +37,12 @@
 [submodule "foundry-upgradeable/lib/forge-std"]
 	path = foundry-upgradeable/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "foundry-upgradeable/lib/openzeppelin-contracts"]
+	path = foundry-upgradeable/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "foundry-upgradeable/lib/openzeppelin-contracts-upgradeable"]
+	path = foundry-upgradeable/lib/openzeppelin-contracts-upgradeable
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable
+[submodule "foundry-upgradeable/lib/foundry-devops"]
+	path = foundry-upgradeable/lib/foundry-devops
+	url = https://github.com/ChainAccelOrg/foundry-devops

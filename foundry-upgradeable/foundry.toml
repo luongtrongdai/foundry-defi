@@ -2,5 +2,22 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+remappings = [
+    "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+    "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+    "merky/=lib/merky/"
+]
+
+ffi = true
+fs_permissions = [
+    { access = "read-write", path = "./script/target" },
+    { access = "read", path = "./broadcast" }
+]
+
+[invariant]
+runs = 128
+depth = 128
+fail_on_revert = false
+
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
