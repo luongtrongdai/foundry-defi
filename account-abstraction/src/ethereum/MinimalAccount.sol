@@ -79,7 +79,7 @@ contract MinimalAccount is Ownable, IAccount {
 
     function _payPrefund(uint256 missingAccountFunds) internal {
         if (missingAccountFunds != 0) {
-            (bool success,) = payable(msg.sender).call{value: missingAccountFunds, gas: uint64(21000)}("");
+            (bool success,) = payable(msg.sender).call{value: missingAccountFunds, gas: type(uint256).max}("");
             if (!success) {
                 revert MinimalAccount__TransferFailed(msg.sender, missingAccountFunds);
             }
