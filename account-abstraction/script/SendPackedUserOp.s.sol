@@ -20,11 +20,12 @@ contract SendPackedUserOp is Script {
 
         bytes32 userOpHash = IEntryPoint(entryPoint).getUserOpHash(userOp);
         bytes32 digest = MessageHashUtils.toEthSignedMessageHash(userOpHash);
-        uint8 v; bytes32 r; bytes32 s;
+        uint8 v;
+        bytes32 r;
+        bytes32 s;
         if (block.chainid == 31337) {
             uint256 anvilDefaultKey = 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;
             (v, r, s) = vm.sign(anvilDefaultKey, digest);
-            
         } else {
             (v, r, s) = vm.sign(account, digest);
         }
