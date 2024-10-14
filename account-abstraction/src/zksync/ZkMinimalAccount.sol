@@ -75,8 +75,10 @@ contract ZkMinimalAccount is Ownable, IAccount {
     // There is no point in providing possible signed hash in the `executeTransactionFromOutside` method,
     // since it typically should not be trusted.
     function executeTransactionFromOutside(Transaction calldata _transaction) external payable {
-        _validateTransaction(_transaction);
-        _executeTransaction(_transaction);
+        bytes4 magic = _validateTransaction(_transaction);
+        if (magic == ACCOUNT_VALIDATION_SUCCESS_MAGIC) {
+            _executeTransaction(_transaction);
+        }
     }
 
     function payForTransaction(bytes32, /*_txHash*/ bytes32, /*_suggestedSignedHash*/ Transaction calldata _transaction)
